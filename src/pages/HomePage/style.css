@@ -1,24 +1,28 @@
-@import '../App.css';
+@import '../../App.css';
 
 .home-container {
   display: flex;
   flex-direction: column;
   background-color: var(--global-cream);
-  padding: 0rem 2rem;
-  .nav-bar {
+  button {
+    border: none;
+    background-color: var(--purple-700);
+    color: var(--global-cream);
+    border-radius: 50px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 80px;
-    color: var(--global-purple);
-    .logo {
-      font-style: italic;
-      font-weight: 700;
-    }
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  button:hover {
+    background-color: var(--global-purple);
+    color: var(--purple-800);
   }
   .main-section {
     display: grid;
-    height: 85vh;
+    height: 90vh;
     grid-template-columns: 1fr 1fr;
     padding: 3rem calc((100vw - 1300px) / 2);
 
@@ -29,23 +33,20 @@
       text-align: left;
       justify-content: center;
       h2 {
-        font-size: 3rem;
-        color: var(--global-purple);
+        font-size: 2.5rem;
+        color: var(--purple-700);
         margin: 0;
+        font-weight: 900;
       }
       p {
         color: var(--global-purple);
         font-size: 1.6rem;
+        margin: 0.5rem 0;
+        font-weight: 600;
       }
       button {
-        border: none;
-        background-color: var(--global-purple);
-        color: var(--global-cream);
         padding: 1rem 3rem;
         font-size: 1.2rem;
-        font-weight: 600;
-        border-radius: 50px;
-        cursor: pointer;
       }
     }
 
@@ -56,13 +57,17 @@
     }
 
     .home-image {
-      width: 100%;
-      height: 100%;
+      width: 90%;
+      height: 90%;
     }
   }
   @media screen and (max-width: 768px) {
     .main-section {
       grid-template-columns: 1fr;
+      .home-image {
+        width: 70%;
+        height: 70%;
+      }
     }
   }
 }

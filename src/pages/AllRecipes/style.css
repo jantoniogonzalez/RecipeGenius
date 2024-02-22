@@ -1,0 +1,14 @@
+@import '../../App.css';
+
+.all-recipes {
+  text-align: left;
+  height: 85vh;
+  padding: 3rem calc((100vw - 1300px) / 2);
+  h2 {
+    font-size: 2rem;
+    color: var(--purple-700);
+  }
+  .cards-container {
+    
+  }
+}
