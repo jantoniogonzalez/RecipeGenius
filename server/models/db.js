@@ -1,12 +1,19 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const { Pool } = require('pg');
 
 var pool = new Pool({
-  connectionString: 'postgres://postgres:root@localhost:5432/recipegeniusdb'
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  host: process.env.PGHOST,
+  port: process.env.PGPORT, // default Postgres port
+  database: process.env.PGDATABASE
 })
 
 const helpers = {
   init: async function() {
-    const q = 'CREATE TABLE IF NOT EXISTS recipes(id SERIAL PRIMARY KEY, name varchar[50], duration integer, description varchar[256], procedure varchar, last_modified timestamp);';
+    const q = 'CREATE TABLE IF NOT EXISTS recipes(id SERIAL PRIMARY KEY, name varchar(255), duration integer, description varchar(255), procedure text, last_modified timestamp);';
     const res = await pool.query(q);
   },
   getAllRecipes: async function() {
@@ -30,8 +37,8 @@ const helpers = {
     return res.rows;
   },
   updateRecipeById: async function(id, name, duration, description, procedure, last_modified) {
-    const q = 'UPDATE recipes WHERE id = $1 SET (name, duration, description, procedure, last_modified) VALUES ($2, $3, $4, $5, $6);';
-    const res = await pool.query(q, [id, name, duration, description, procedure, last_modified]);
+    const q = 'UPDATE recipes SET name = $1, duration = $2, description = $3, procedure = $4, last_modified = $5 WHERE id = $6 RETURNING *;';
+    const res = await pool.query(q, [name, duration, description, procedure, last_modified, id]);
     return res.rows;
   },
   deleteRecipeById: async function(id) {

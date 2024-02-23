@@ -1,8 +1,10 @@
-import express from "express";
-import cors from "cors";
-
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+const express = require('express');
+const cors = require('cors');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const db = require('./models/db');
 
@@ -20,47 +22,77 @@ async function InitDB() {
 }
 
 app.get('/recipes', async (req, res) => {
-  const recipes = await db.helpers.getAllRecipes();
-  res.json(recipes);
+  try{
+    const recipes = await db.helpers.getAllRecipes();
+    res.json(recipes);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while getting all the recipes' });
+  }
 });
 
 app.get('/recipes/:id', async (req, res) => {
-  const id = req.params.id;
-  const recipe = await db.helpers.getRecipeById(id);
-  res.json(recipe);
+  try {
+    const id = req.params.id;
+    const recipe = await db.helpers.getRecipeById(id);
+    res.json(recipe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: `An error ocurred while getting the recipe with id ${id}` });
+  }
 });
 
 app.get('/recipes/latest/:numberOfRecipes', async (req, res) => {
-  const numberOfRecipes = req.params.numberOfRecipes;
-  const recipes = await db.helpers.getLatestRecipes(numberOfRecipes);
-  res.json(recipes);
+  try {
+    const numberOfRecipes = req.params.numberOfRecipes;
+    const recipes = await db.helpers.getLatestRecipes(numberOfRecipes);
+    res.json(recipes);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while getting the latest recipes' });
+  }
 })
 
 app.post('/recipes/add', async (req, res) => {
-  const name = req.body.name;
-  const duration = req.body.duration;
-  const description = req.body.description;
-  const procedure = req.body.procedure;
-  const last_modified = req.body.last_modified;
-  const newRecipe = await db.helpers.createRecipe(name, duration, description, procedure, last_modified);
-  res.json(newRecipe);
+  try {
+    const name = req.body.name;
+    const duration = req.body.duration;
+    const description = req.body.description;
+    const procedure = req.body.procedure;
+    const last_modified = req.body.last_modified;
+    const newRecipe = await db.helpers.createRecipe(name, duration, description, procedure, last_modified);
+    res.json(newRecipe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while adding the recipe' });
+  }
 })
 
 app.put('/recipes/edit/:id', async (req, res) => {
-  const id = req.params.id;
-  const name = req.body.name;
-  const duration = req.body.duration;
-  const description = req.body.description;
-  const procedure = req.body.procedure;
-  const last_modified = req.body.last_modified;
-  const newRecipe = await db.helpers.updateRecipeById(id, name, duration, description, procedure, last_modified);
-  res.json(newRecipe);
+  try {
+    const id = req.params.id;
+    const name = req.body.name;
+    const duration = req.body.duration;
+    const description = req.body.description;
+    const procedure = req.body.procedure;
+    const last_modified = req.body.last_modified;
+    const newRecipe = await db.helpers.updateRecipeById(id, name, duration, description, procedure, last_modified);
+    res.json(newRecipe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while updating the recipe' });
+  }
 })
 
-app.delete('recipe/delete/:id', async (req, res) => {
-  const id = req.params.id;
-  const deletedRecipe = await db.helpers.deleteRecipeById(id);
-  res.json(deletedRecipe);
+app.delete('/recipes/delete/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedRecipe = await db.helpers.deleteRecipeById(id);
+    res.json(deletedRecipe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while deleting the recipe' });
+  }
 })
 
 InitDB()
