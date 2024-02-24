@@ -9,6 +9,8 @@
     color: var(--purple-700);
   }
   .cards-container {
-    
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 }

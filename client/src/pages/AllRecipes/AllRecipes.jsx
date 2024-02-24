@@ -26,9 +26,14 @@ function AllRecipes() {
   return (
     <div className="all-recipes">
       <h2>All Recipes</h2>
+      <button>Add Recipe</button>
       <div className="cards-container">
-        
-        <Card />
+        {recipes && recipes.map((recipe) => {
+          return (
+            // eslint-disable-next-line react/jsx-key
+            <Card recipe={recipe} />
+          )
+        })}
       </div>
     </div>
   );

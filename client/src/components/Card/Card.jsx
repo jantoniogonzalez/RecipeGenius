@@ -30,19 +30,19 @@ function Card({ recipe }) {
 
 
   return(
-    <div className="card">
+    <div className="card" onClick={() => console.log('CLICKED CARD')}>
       <div className="card-content">
         <img className="card-image" src={breakfast} alt="food" />
         <div className="bottom-text">
-          <h3>Breakfast</h3>
+          <h3>{recipeName}</h3>
           <div className="actions">
             <div className="time">
               <TimerOutlinedIcon fontSize="medium" />
-              <p>60'</p>
+              <p>{recipeDuration}</p>
             </div>
             <div className="buttons">
-              <button className="edit"><EditIcon fontSize='small' /></button>
-              <button className="delete"><DeleteIcon fontSize='small' /></button>
+              <button className="edit" onClick={(e) => e.stopPropagation()}><EditIcon fontSize='small' /></button>
+              <button className="delete" onClick={(e) => e.stopPropagation()}><DeleteIcon fontSize='small' /></button>
             </div>
           </div>
         </div>
