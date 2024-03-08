@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Chip from '../../components/Chip/Chip';
 import './style.css';
 
 function AddRecipe() {
+  const [recipeName, setRecipeName] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [steps, setSteps] = useState([]);
+  const [cookTime, setCookTime] = useState(0);
+  const [prepTime, setPrepTime] = useState(0);
+  const [ingredients, setIngredients] = useState([]);
 
   return (
     <div className="add-recipe">
@@ -13,7 +20,7 @@ function AddRecipe() {
         <div className="first-fields">
           <div className="field">
             <label>Name of your masterpiece?</label>
-            <input type="text" />
+            <input type="text" value={recipeName} onBlur={(e) => setRecipeName(e.value)} />
           </div>
           <div className="field">
             <label>Time is relative anyways...</label>
@@ -23,14 +30,14 @@ function AddRecipe() {
           </div>
           <div className="field">
             <label>Can you describe this delicacy for me?</label>
-            <textarea />
+            <textarea value={description} onBlur={(e) => setDescription(e.value)} />
           </div>
         </div>
       </div>
       <div>
         <div className="field">
           <label>What ingredients will we need?</label>
-          <input type="text" />
+          <input type="text"  />
         </div>
         <div>
           <p>100g of Examples</p>

@@ -1,0 +1,7 @@
+@import '../../App.css';
+
+.chip {
+  border-radius: 10px;
+  background-color: var(--global-purple);
+  color: var(--global-cream);
+}

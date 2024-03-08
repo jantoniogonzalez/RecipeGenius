@@ -18,12 +18,12 @@ app.use(express.urlencoded({ extended: false }))
 
 
 async function InitDB() {
-  await db.helpers.init();
+  await db.recipeHelpers.init();
 }
 
 app.get('/recipes', async (req, res) => {
   try{
-    const recipes = await db.helpers.getAllRecipes();
+    const recipes = await db.recipeHelpers.getAllRecipes();
     res.json(recipes);
   } catch (err) {
     console.log(err);
@@ -31,26 +31,44 @@ app.get('/recipes', async (req, res) => {
   }
 });
 
-app.get('/recipes/:id', async (req, res) => {
+app.get('/recipes/:recipe_id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const recipe = await db.helpers.getRecipeById(id);
-    res.json(recipe);
+    const recipe_id = req.params.recipe_id;
+    const recipe = await db.recipeHelpers.getRecipeById(recipe_id);
+    const ingredients = await db.recipeIngredientHelpers.getRecipeIngredients(recipe.recipe_id);
+    const recipeInfo = { recipe, ingredients };
+    res.json(recipeInfo);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: `An error ocurred while getting the recipe with id ${id}` });
+    res.status(500).json({ error: `An error ocurred while getting the recipe with recipe_id ${recipe_id}` });
   }
 });
 
 app.get('/recipes/latest/:numberOfRecipes', async (req, res) => {
   try {
     const numberOfRecipes = req.params.numberOfRecipes;
-    const recipes = await db.helpers.getLatestRecipes(numberOfRecipes);
+    const recipes = await db.recipeHelpers.getLatestRecipes(numberOfRecipes);
     res.json(recipes);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error ocurred while getting the latest recipes' });
   }
+})
+
+app.post('/ingredients/add', async (req, res) => {
+  try {
+    const name = req.body.name;
+    const newIngredient = await db.ingredientHelpers.createIngredient(name);
+    res.json(newIngredient);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while adding the ingredient' });
+  }
+})
+
+// Receives an array of 
+app.post('/recipe_ingredients/add', async (req, res) => {
+
 })
 
 app.post('/recipes/add', async (req, res) => {
@@ -60,7 +78,7 @@ app.post('/recipes/add', async (req, res) => {
     const description = req.body.description;
     const procedure = req.body.procedure;
     const last_modified = req.body.last_modified;
-    const newRecipe = await db.helpers.createRecipe(name, duration, description, procedure, last_modified);
+    const newRecipe = await db.recipeHelpers.createRecipe(name, duration, description, procedure, last_modified);
     res.json(newRecipe);
   } catch (err) {
     console.log(err);
@@ -68,15 +86,15 @@ app.post('/recipes/add', async (req, res) => {
   }
 })
 
-app.put('/recipes/edit/:id', async (req, res) => {
+app.put('/recipes/edit/:recipe_id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const recipe_id = req.params.recipe_id;
     const name = req.body.name;
     const duration = req.body.duration;
     const description = req.body.description;
     const procedure = req.body.procedure;
     const last_modified = req.body.last_modified;
-    const newRecipe = await db.helpers.updateRecipeById(id, name, duration, description, procedure, last_modified);
+    const newRecipe = await db.recipeHelpers.updateRecipeById(recipe_id, name, duration, description, procedure, last_modified);
     res.json(newRecipe);
   } catch (err) {
     console.log(err);
@@ -84,10 +102,10 @@ app.put('/recipes/edit/:id', async (req, res) => {
   }
 })
 
-app.delete('/recipes/delete/:id', async (req, res) => {
+app.delete('/recipes/delete/:recipe_id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const deletedRecipe = await db.helpers.deleteRecipeById(id);
+    const recipe_id = req.params.recipe_id;
+    const deletedRecipe = await db.recipeHelpers.deleteRecipeById(recipe_id);
     res.json(deletedRecipe);
   } catch (err) {
     console.log(err);
