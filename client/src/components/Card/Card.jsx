@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 // Icons
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
@@ -9,10 +12,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import breakfast from '../../images/food-bowl.jpg';
 import './style.css';
 
-function Card({ recipe }) {
+function Card({ recipe, onDelete }) {
   const [recipeId, setRecipeId] = useState(null);
   const [recipeName, setRecipeName] = useState(null);
   const [recipeDuration, setRecipeDuration] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let didCancel = false;
@@ -20,14 +24,30 @@ function Card({ recipe }) {
     if (!recipe) return;
 
     if (!didCancel) {
-      setRecipeId(recipe.id);
+      setRecipeId(recipe.recipe_id);
       setRecipeName(recipe.name);
-      setRecipeDuration(recipe.duration);
+      setRecipeDuration(recipe.cook_time + recipe.prep_time);
     }
 
     return () => { return didCancel = true; };
   }, [recipe]);
 
+  function editRecipe(e) {
+    e.stopPropagation();
+    console.log('EDIT RECIPE');
+    navigate(`/recipe/edit/${recipeId}`)
+  }
+
+  async function deleteRecipe(e) {
+    e.stopPropagation();
+    try{
+      const response = await axios.delete(`http://localhost:3000/recipes/delete/${recipeId}`);
+      onDelete();
+      console.log(`Recipe deleted: ${response.data}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return(
     <div className="card" onClick={() => console.log('CLICKED CARD')}>
@@ -41,8 +61,8 @@ function Card({ recipe }) {
               <p>{recipeDuration}</p>
             </div>
             <div className="buttons">
-              <button className="edit" onClick={(e) => e.stopPropagation()}><EditIcon fontSize='small' /></button>
-              <button className="delete" onClick={(e) => e.stopPropagation()}><DeleteIcon fontSize='small' /></button>
+              <button className="edit" onClick={(e) => editRecipe(e)}><EditIcon fontSize='small' /></button>
+              <button className="delete" onClick={(e) => deleteRecipe(e)}><DeleteIcon fontSize='small' /></button>
             </div>
           </div>
         </div>

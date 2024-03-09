@@ -4,13 +4,15 @@
   text-align: center;
   font-family: 'Inter', sans-serif;
   /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
-  --global-purple: #f0475e;
-  --purple-300: #f47c8c;
-  --purple-700: #b80f25;
-  --purple-800: #4f0610;
+  --global-red: #f0475e;
+  --red-300: #f47c8c;
+  --red-700: #b80f25;
+  --red-800: #4f0610;
+  --red-200: #f9d3d8;
+  --red-100: #f9e3e4;
   --global-cream: #feffff;
   --global-green: #00BF71;
-  --global-red: #FF6584;
+  --global-danger: #FF6584;
   --global-grey: #EDEBEB;
 }
 
@@ -37,4 +39,8 @@ a {
 
 .read-the-docs {
   color: #888;
+}
+
+input, textarea, select {
+  font-family: 'Inter', sans-serif;
 }

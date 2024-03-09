@@ -23,7 +23,6 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <AllRecipes />
     </div>
 
   );

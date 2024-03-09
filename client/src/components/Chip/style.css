@@ -2,6 +2,17 @@
 
 .chip {
   border-radius: 10px;
-  background-color: var(--global-purple);
-  color: var(--global-cream);
+  background-color: var(--global-red);
+  color: white;
+  font-size: 1rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+  button {
+    margin-left: 0.5rem;
+    border-radius: 50px;
+    padding: 0.1rem;
+  }
 }

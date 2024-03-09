@@ -7,7 +7,9 @@ function NavBar() {
         <Link to="/"><h1 className="logo">RecipeGenius</h1></Link>
         <div className="links">
           <Link to="/recipes">All Recipes</Link>
-          <button>Login</button>
+          <Link to="/recipe/add">
+            <button>New Recipe</button>
+          </Link>
         </div>
     </nav>
   )

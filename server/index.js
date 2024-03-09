@@ -35,7 +35,7 @@ app.get('/recipes/:recipe_id', async (req, res) => {
   try {
     const recipe_id = req.params.recipe_id;
     const recipe = await db.recipeHelpers.getRecipeById(recipe_id);
-    const ingredients = await db.recipeIngredientHelpers.getRecipeIngredients(recipe.recipe_id);
+    const ingredients = await db.recipeIngredientHelpers.getRecipeIngredients(recipe_id);
     const recipeInfo = { recipe, ingredients };
     res.json(recipeInfo);
   } catch (err) {
@@ -55,30 +55,15 @@ app.get('/recipes/latest/:numberOfRecipes', async (req, res) => {
   }
 })
 
-app.post('/ingredients/add', async (req, res) => {
-  try {
-    const name = req.body.name;
-    const newIngredient = await db.ingredientHelpers.createIngredient(name);
-    res.json(newIngredient);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'An error ocurred while adding the ingredient' });
-  }
-})
-
-// Receives an array of 
-app.post('/recipe_ingredients/add', async (req, res) => {
-
-})
-
 app.post('/recipes/add', async (req, res) => {
   try {
     const name = req.body.name;
-    const duration = req.body.duration;
+    const prep_time = req.body.prep_time;
+    const cook_time = req.body.cook_time;
     const description = req.body.description;
     const procedure = req.body.procedure;
     const last_modified = req.body.last_modified;
-    const newRecipe = await db.recipeHelpers.createRecipe(name, duration, description, procedure, last_modified);
+    const newRecipe = await db.recipeHelpers.createRecipe(name, prep_time, cook_time, description, procedure, last_modified);
     res.json(newRecipe);
   } catch (err) {
     console.log(err);
@@ -90,11 +75,12 @@ app.put('/recipes/edit/:recipe_id', async (req, res) => {
   try {
     const recipe_id = req.params.recipe_id;
     const name = req.body.name;
-    const duration = req.body.duration;
+    const prep_time = req.body.prep_time;
+    const cook_time = req.body.cook_time;
     const description = req.body.description;
     const procedure = req.body.procedure;
     const last_modified = req.body.last_modified;
-    const newRecipe = await db.recipeHelpers.updateRecipeById(recipe_id, name, duration, description, procedure, last_modified);
+    const newRecipe = await db.recipeHelpers.updateRecipeById(recipe_id, name, prep_time, cook_time, description, procedure, last_modified);
     res.json(newRecipe);
   } catch (err) {
     console.log(err);
@@ -106,12 +92,49 @@ app.delete('/recipes/delete/:recipe_id', async (req, res) => {
   try {
     const recipe_id = req.params.recipe_id;
     const deletedRecipe = await db.recipeHelpers.deleteRecipeById(recipe_id);
+    console.log(recipe_id);
     res.json(deletedRecipe);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error ocurred while deleting the recipe' });
   }
 })
+
+app.post('/ingredients/add', async (req, res) => {
+  try {
+    const name = req.body.name;
+    const newIngredient = await db.ingredientHelpers.createIngredient(name);
+    res.json(newIngredient);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while adding the ingredient' });
+  }
+})
+
+// Receives an array of ingredients and adds it to the recipe
+app.post('/recipe_ingredients/add-multiple', async (req, res) => {
+  try {
+    const recipe_ingredients = req.body.recipe_ingredients;
+    const recipe_id = req.body.recipe_id;
+    const newRecipeIngredients = await db.recipeIngredientHelpers.createRecipeIngredients(recipe_ingredients, recipe_id);
+    res.json(newRecipeIngredients);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while adding the recipe_ingredients' });
+  }
+})
+
+app.delete('/recipe_ingredients/delete/:recipe_ingredient_id', async (req, res) => {
+  try {
+    const recipe_ingredient_id = req.params.recipe_ingredient_id;
+    const deletedRecipeIngredients = await db.recipeIngredientHelpers.deleteRecipeIngredient(recipe_ingredient_id);
+    res.json(deletedRecipeIngredients);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while deleting the recipe_ingredients' });
+  }
+})
+
 
 InitDB()
   .then(() => {

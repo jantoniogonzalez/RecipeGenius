@@ -46,24 +46,24 @@
           }
         }
         .buttons {
+          display: flex;
+          gap: 0.5rem;
           button {
             border: none;
             border-radius: 5px;
             height: 25px;
             width: 25px;
             cursor: pointer;
-            text-align: center;
             color: var(--global-cream);
-            padding: 0;
+            padding: 0.2rem;
             transition: all 0.2s ease-in-out;
             z-index: 1;
           }
           .edit {
             background-color: var(--global-green);
-            margin-right: 0.5rem;
           }
           .delete {
-            background-color: var(--global-red);
+            background-color: var(--global-danger);
           }
           button:hover {
             transform: scale(1.2);

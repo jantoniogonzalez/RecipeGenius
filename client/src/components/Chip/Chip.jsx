@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import './style.css';
 
-import './styles';
 
-
-function Chip({ ingredientName, ingredientQuantity, ingredientUnit, deleteChip }) {
+function Chip({ text, deleteChip, style={} }) {
   return (
-    <div className="chip">
-      <p>{ingredientQuantity}{ingredientUnit} {ingredientName}</p>
+    <div className="chip" style={style}>
+      <span>{text}</span>
       <button onClick={() => deleteChip()}><CloseIcon /></button>
     </div>
   )

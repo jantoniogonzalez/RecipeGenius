@@ -6,7 +6,7 @@
   background-color: var(--global-cream);
   button {
     border: none;
-    background-color: var(--purple-700);
+    background-color: var(--red-700);
     color: var(--global-cream);
     border-radius: 50px;
     display: flex;
@@ -17,8 +17,8 @@
   }
 
   button:hover {
-    background-color: var(--global-purple);
-    color: var(--purple-800);
+    background-color: var(--global-red);
+    color: var(--red-800);
   }
   .main-section {
     display: grid;
@@ -34,12 +34,12 @@
       justify-content: center;
       h2 {
         font-size: 2.5rem;
-        color: var(--purple-700);
+        color: var(--red-700);
         margin: 0;
         font-weight: 900;
       }
       p {
-        color: var(--global-purple);
+        color: var(--global-red);
         font-size: 1.6rem;
         margin: 0.5rem 0;
         font-weight: 600;

@@ -3,14 +3,32 @@
 .all-recipes {
   text-align: left;
   height: 85vh;
-  padding: 3rem calc((100vw - 1300px) / 2);
+  padding: 1rem calc((100vw - 1300px) / 2);
   h2 {
     font-size: 2rem;
-    color: var(--purple-700);
+    color: var(--red-700);
   }
   .cards-container {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+  }
+  button {
+    border: none;
+    background-color: var(--red-700);
+    color: var(--global-cream);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+  }
+
+  button:hover {
+    background-color: var(--global-red);
+    color: var(--red-800);
   }
 }

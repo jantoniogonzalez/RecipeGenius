@@ -89,18 +89,13 @@ const recipeIngredientHelpers = {
       if (i < ingredients.length - 1) valueString += `(${ingredient_id}, ${quantity}, '${unit}', ${recipe_id}), `;
       else valueString += `(${ingredient_id}, ${quantity}, '${unit}', ${recipe_id})`;
     }
-    const q = `INSERT INTO recipe_ingredients (ingredient_id, quantity, unit, recipe_id) VALUES ${valueString};`;
+    const q = `INSERT INTO recipe_ingredients (ingredient_id, quantity, unit, recipe_id) VALUES ${valueString} RETURNING *;`;
     const res = await pool.query(q);
     return res.rows;
   },
-  updateRecipeIngredient: async function(ingredient_id, quantity, unit, id) {
-    const q = 'UPDATE recipe_ingredients SET quantity = $1, unit = $2, ingredient_id = $3 WHERE id = $4 RETURNING *;';
-    const res = await pool.query(q, [quantity, unit, ingredient_id, id]);
-    return res.rows;
-  },
-  deleteRecipeIngredient: async function(recipe_id) {
-    const q = 'DELETE FROM recipe_ingredients WHERE recipe_id = $1;';
-    const res = await pool.query(q, [recipe_id]);
+  deleteRecipeIngredient: async function(recipe_ingredient_id) {
+    const q = 'DELETE FROM recipe_ingredients WHERE recipe_ingredient_id = $1 RETURNING *;';
+    const res = await pool.query(q, [recipe_ingredient_id]);
   },
 }
 
@@ -108,7 +103,7 @@ const recipeHelpers = {
   init: async function() {
     const q = 'CREATE TABLE IF NOT EXISTS recipes(recipe_id SERIAL PRIMARY KEY, name varchar(255), prep_time integer, cook_time integer, description varchar(255), procedure text[], last_modified timestamp);';
     const q2 = 'CREATE TABLE IF NOT EXISTS ingredients(ingredient_id SERIAL PRIMARY KEY, name varchar(255));';
-    const q3 = 'CREATE TABLE IF NOT EXISTS recipe_ingredients(recipe_ingredient_id SERIAL PRIMARY KEY, ingredient_id integer, quantity integer, unit varchar(255), recipe_id integer, CONSTRAINT fk_recipe FOREIGN KEY(recipe_id) REFERENCE recipes(recipe_id) ON DELETE CASCADE, CONSTRAINT fk_ingredient FOREIGN KEY(ingredient_id) REFERENCE ingredients(ingredient_id) ON DELETE SET NULL);';
+    const q3 = 'CREATE TABLE IF NOT EXISTS recipe_ingredients(recipe_ingredient_id SERIAL PRIMARY KEY, ingredient_id integer, quantity integer, unit varchar(255), recipe_id integer, CONSTRAINT fk_recipe FOREIGN KEY(recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE, CONSTRAINT fk_ingredient FOREIGN KEY(ingredient_id) REFERENCES ingredients(ingredient_id) ON DELETE SET NULL);';
     await pool.query(q);
     await pool.query(q2);
     await pool.query(q3);
@@ -129,7 +124,7 @@ const recipeHelpers = {
     return res.rows;
   },
   createRecipe: async function(name, prep_time, cook_time, description, procedure, last_modified) {
-    const q = 'INSERT INTO recipes (name, prep_time, cook_time, description, procedure, last_modified) VALUES ($1, $2, $3, $4, $5, $6);';
+    const q = 'INSERT INTO recipes (name, prep_time, cook_time, description, procedure, last_modified) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;';
     const res = await pool.query(q, [name, prep_time, cook_time, description, procedure, last_modified]);
     return res.rows;
   },
