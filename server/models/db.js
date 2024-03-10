@@ -45,6 +45,19 @@ const ingredientHelpers = {
     const res = await pool.query(q, [name]);
     return res.rows;
   },
+  // Create multiple ingredients, if they don't exist
+  createIngredients: async function(ingredients) {
+    let valueString = '';
+    for (let i = 0; i < ingredients.length; i++) {
+      const ingredient = ingredients[i];
+      const name = ingredient.name;
+      if (i < ingredients.length - 1) valueString += `('${name}'), `;
+      else valueString += `('${name}')`;
+    }
+    const q = `INSERT INTO ingredients (name) VALUES ${valueString} RETURNING *;`;
+    const res = await pool.query(q);
+    return res.rows;
+  },
   // Update an ingredient with a specific id
   updateIngredientById: async function(id, name) {
     const q = 'UPDATE ingredients SET name = $1 WHERE id = $2 RETURNING *;';
@@ -62,13 +75,13 @@ const ingredientHelpers = {
 const recipeIngredientHelpers = {
   // Gets all the ingredients for a specific recipe
   getRecipeIngredients: async function(recipe_id) {
-    const q = 'SELECT * FROM recipe_ingredients WHERE recipe_id = $1;';
+    const q = 'SELECT * FROM recipe_ingredients t1 INNER JOIN ingredients t2 ON t1.recipe_id = $1 AND t1.ingredient_id = t2.ingredient_id;';
     const res = await pool.query(q, [recipe_id]);
     return res.rows
   },
   // Gets all the recipes that contain a specific ingredient
   getRecipesByIngredient: async function(ingredient_id) {
-    const q = 'SELECT recipes.recipe_id, recipes.name, recipes.prep_time, recipes.cook_time, recipes.description, recipes.procedure, recipes.last_modified FROM recipe_ingredients WHERE ingredient_id = $1 INNER JOIN recipes ON recipe_ingredients.recipe_id = recipes.recipe_id;';
+    const q = 'SELECT * FROM recipes t1 INNER JOIN recipe_ingredients t2 ON t2.ingredient_id = $1 AND t1.recipe_id = t2.recipe_id;';
     const res = await pool.query(q, [ingredient_id]);
     return res.rows;
   },

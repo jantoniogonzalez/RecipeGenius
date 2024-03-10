@@ -36,7 +36,7 @@ app.get('/recipes/:recipe_id', async (req, res) => {
     const recipe_id = req.params.recipe_id;
     const recipe = await db.recipeHelpers.getRecipeById(recipe_id);
     const ingredients = await db.recipeIngredientHelpers.getRecipeIngredients(recipe_id);
-    const recipeInfo = { recipe, ingredients };
+    const recipeInfo = { recipe: recipe[0], ingredients };
     res.json(recipeInfo);
   } catch (err) {
     console.log(err);
@@ -108,6 +108,18 @@ app.post('/ingredients/add', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error ocurred while adding the ingredient' });
+  }
+})
+
+// Receives an arroy of ingredients and adds them to the database
+app.post('/ingredients/add-multiple', async (req, res) => {
+  try {
+    const ingredients = req.body.ingredients;
+    const newIngredients = await db.ingredientHelpers.createIngredients(ingredients);
+    res.json(newIngredients);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'An error ocurred while adding the ingredients' });
   }
 })
 
