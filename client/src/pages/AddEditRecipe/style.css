@@ -29,7 +29,10 @@
   button:hover {
     background-color: var(--red-700);
   }
-
+  button:disabled:hover {
+    background-color: var(--red-300);
+    color: var(--global-cream)
+  }
   button:disabled {
     background-color: var(--red-300);
     cursor: not-allowed;
@@ -118,6 +121,12 @@
   .submit:hover {
     background-color: var(--global-red);
     color: var(--red-800);
+  }
+  .error {
+    color: var(--global-danger);
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1rem;
   }
   .steps-list {
     width: 100%;

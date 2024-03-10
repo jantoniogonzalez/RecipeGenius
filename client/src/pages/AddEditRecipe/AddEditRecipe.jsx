@@ -44,6 +44,7 @@ function AddEditRecipe() {
         setIsEditForm(true);
         console.log(recipeInfo);
       } catch(err) {
+        navigate('/not-found');
         console.log(err);
       }
       
@@ -159,14 +160,14 @@ function AddEditRecipe() {
             </div>
             <div style={{display: 'flex', justifyContent: 'start'}}>
               <div className="field" style={{marginRight: '1rem'}}>
-                <label>Prep Time</label>
+                <label>Prep Time 🥣</label>
                 <div>
                   <input type="number" value={prepTime} onChange={(e) => setPrepTime(e.target.value)} placeholder="5" />
                   <span className="units">minutes</span>
                 </div>
               </div>
               <div className="field">
-                <label>Cook Time</label>
+                <label>Cook Time 🥘</label>
                 <div>
                   <input type="number" value={cookTime} onChange={(e) => setCookTime(e.target.value)} placeholder="10" />
                   <span className="units">minutes</span>
@@ -174,7 +175,7 @@ function AddEditRecipe() {
               </div>
             </div>
             <div className="field">
-              <label>Description <span style={{fontSize: '1rem', fontStyle: 'italic'}}>(~keep it under 256 characters)</span></label>
+              <label>Description 📖<span style={{fontSize: '1rem', fontStyle: 'italic'}}>(~keep it under 256 characters)</span></label>
               <textarea maxLength={255} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="The cheesiest grilled cheese sandwich" />
             </div>
           </div>
@@ -227,7 +228,8 @@ function AddEditRecipe() {
           </div>
         )}
         <div>
-          <button type="submit" className="submit" onClick={async (e) => await submitRecipe(e)}> {isEditForm? 'Save Changes' : 'Add Recipe'}</button>
+          {(!ingredients || !recipeName || !prepTime || !cookTime || !description || !procedure) && <p className="error">*finish your 🥦 first... I mean fields</p>}
+          <button disabled={!ingredients || !recipeName || !prepTime || !cookTime || !description || !procedure} type="submit" className="submit" onClick={async (e) => await submitRecipe(e)}> {isEditForm? 'Save Changes' : 'Add Recipe'}</button>
         </div>
       </form>
     </div>

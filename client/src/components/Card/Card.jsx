@@ -50,7 +50,7 @@ function Card({ recipe, onDelete }) {
   }
 
   return(
-    <div className="card" onClick={() => console.log('CLICKED CARD')}>
+    <div className="card" onClick={() => navigate(`/recipe/${recipeId}`)}>
       <div className="card-content">
         <img className="card-image" src={breakfast} alt="food" />
         <div className="bottom-text">
