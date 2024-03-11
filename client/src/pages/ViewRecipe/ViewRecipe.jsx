@@ -24,7 +24,7 @@ function ViewRecipe() {
     console.log( `Fetching recipe with id ${recipe_id}`);
     async function getRecipe() {
       try {
-        const recipeInfo = await axios.get(`http://localhost:3000/recipes/${recipe_id}`);
+        const recipeInfo = await axios.get(`http://localhost:8080/recipes/${recipe_id}`);
         const recipe = recipeInfo.data.recipe;
         const ingredients = recipeInfo.data.ingredients;
         setIngredients(ingredients);
@@ -41,7 +41,7 @@ function ViewRecipe() {
 
   async function deleteRecipe() {
     try {
-      const response = await axios.delete(`http://localhost:3000/recipes/delete/${recipe_id}`);
+      const response = await axios.delete(`http://localhost:8080/recipes/delete/${recipe_id}`);
       console.log(`Recipe deleted: ${response.data}`);
       navigate('/recipes');
     } catch (err) {

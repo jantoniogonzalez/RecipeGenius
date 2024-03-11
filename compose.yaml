@@ -1,0 +1,32 @@
+services:
+  server:
+    container_name: server
+    restart: always
+    build: ./server
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+  db:
+    container_name: db
+    image: postgres
+    ports:
+      - 5432:${PGPORT}
+    volumes:
+      - data:/data/db
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+  client:
+    container_name: client
+    restart: always
+    build: ./client
+    ports:
+      - 3000:3000
+    depends_on:
+      - server
+volumes:
+  data: {}

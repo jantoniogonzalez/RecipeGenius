@@ -32,7 +32,7 @@ function AddEditRecipe() {
     console.log( `Fetching recipe with id ${recipe_id}`);
     async function getRecipe() {
       try {
-        const recipeInfo = await axios.get(`http://localhost:3000/recipes/${recipe_id}`);
+        const recipeInfo = await axios.get(`http://localhost:8080/recipes/${recipe_id}`);
         const recipe = recipeInfo.data.recipe;
         const ingredients = recipeInfo.data.ingredients;
         setIngredients(ingredients);
@@ -56,7 +56,7 @@ function AddEditRecipe() {
     e.preventDefault();
     try {
       const name = currentIngredient.name.toLowerCase().trim();
-      const response = await axios.post(`http://localhost:3000/ingredients/add`, { name });
+      const response = await axios.post(`http://localhost:8080/ingredients/add`, { name });
       const newIngredientData = response.data[0];
       const newIngredient = { ...currentIngredient, ingredient_id: newIngredientData.ingredient_id};
       setIngredients([...ingredients, newIngredient]);
@@ -88,7 +88,7 @@ function AddEditRecipe() {
     e.preventDefault();
     if (isEditForm && ingredients[index].recipe_ingredient_id !== undefined) {
       try {
-        const response = await axios.delete(`http://localhost:3000/recipe_ingredients/delete/${ingredients[index].recipe_ingredient_id}`);
+        const response = await axios.delete(`http://localhost:8080/recipe_ingredients/delete/${ingredients[index].recipe_ingredient_id}`);
         console.log(response);
       } catch(err) {
         console.log(err);
@@ -107,7 +107,7 @@ function AddEditRecipe() {
     e.preventDefault();
     try {
       if (isEditForm) {
-        const response = await axios.put(`http://localhost:3000/recipes/edit/${recipe_id}`, {
+        const response = await axios.put(`http://localhost:8080/recipes/edit/${recipe_id}`, {
           name: recipeName,
           description,
           procedure,
@@ -116,14 +116,14 @@ function AddEditRecipe() {
           last_modified: new Date(),
         });
         const newIngredients = ingredients.filter(ingredient => ingredient.recipe_ingredient_id === undefined);
-        const recipe_ingredients_response = await axios.post('http://localhost:3000/recipe_ingredients/add-multiple', {
+        const recipe_ingredients_response = await axios.post('http://localhost:8080/recipe_ingredients/add-multiple', {
           recipe_ingredients: newIngredients,
           recipe_id,
         })
         console.log(response);
         console.log(recipe_ingredients_response);
       } else {
-        const response = await axios.post(`http://localhost:3000/recipes/add`, {
+        const response = await axios.post(`http://localhost:8080/recipes/add`, {
           name: recipeName,
           description,
           procedure,
@@ -132,7 +132,7 @@ function AddEditRecipe() {
           last_modified: new Date(),
         });
         const newRecipe = response.data[0];
-        await axios.post('http://localhost:3000/recipe_ingredients/add-multiple', {
+        await axios.post('http://localhost:8080/recipe_ingredients/add-multiple', {
           recipe_ingredients: ingredients,
           recipe_id: newRecipe.recipe_id,
         })

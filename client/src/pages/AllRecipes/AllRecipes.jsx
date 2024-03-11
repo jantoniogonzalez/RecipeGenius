@@ -13,8 +13,9 @@ function AllRecipes() {
     let didCancel = false;
     async function getAllRecipes() {
       try {
-        const response = await axios.get(`http://localhost:3000/recipes`);
+        const response = await axios.get(`http://localhost:8080/recipes`);
         const recipes = response.data;
+        console.log('fetching recipes')
         console.log(recipes);
         if (!didCancel) setRecipes(recipes);
       } catch (err) {
@@ -37,7 +38,7 @@ function AllRecipes() {
       <div className="all-recipes">
         <h2>All Recipes</h2>
         <div className="cards-container">
-          {recipes && recipes.map((recipe, key) => {
+          {recipes.length > 0 && recipes.map((recipe, key) => {
             return (
               // eslint-disable-next-line react/jsx-key
               <Card key={key} recipe={recipe} onDelete={() => deleteRecipe(key)} />

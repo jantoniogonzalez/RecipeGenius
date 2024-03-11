@@ -41,7 +41,7 @@ function Card({ recipe, onDelete }) {
   async function deleteRecipe(e) {
     e.stopPropagation();
     try{
-      const response = await axios.delete(`http://localhost:3000/recipes/delete/${recipeId}`);
+      const response = await axios.delete(`http://localhost:8080/recipes/delete/${recipeId}`);
       onDelete();
       console.log(`Recipe deleted: ${response.data}`);
     } catch (err) {
